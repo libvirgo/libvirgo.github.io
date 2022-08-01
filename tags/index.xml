@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Tags on </title>
+        <link>/tags/</link>
+        <description>Recent content in Tags on </description>
+        <generator>Hugo -- gohugo.io</generator>
+        <lastBuildDate>Sat, 01 May 2021 00:50:44 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Concept</title>
+        <link>/tags/concept/</link>
+        <pubDate>Sat, 01 May 2021 00:50:44 +0800</pubDate>
+        
+        <guid>/tags/concept/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Note</title>
+        <link>/tags/note/</link>
+        <pubDate>Sat, 01 May 2021 00:50:44 +0800</pubDate>
+        
+        <guid>/tags/note/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Enum</title>
+        <link>/tags/enum/</link>
+        <pubDate>Wed, 13 Jan 2021 11:00:00 +0800</pubDate>
+        
+        <guid>/tags/enum/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Rust</title>
+        <link>/tags/rust/</link>
+        <pubDate>Wed, 13 Jan 2021 11:00:00 +0800</pubDate>
+        
+        <guid>/tags/rust/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Translation</title>
+        <link>/tags/translation/</link>
+        <pubDate>Wed, 13 Jan 2021 11:00:00 +0800</pubDate>
+        
+        <guid>/tags/translation/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Async</title>
+        <link>/tags/async/</link>
+        <pubDate>Wed, 18 Nov 2020 13:28:44 +0800</pubDate>
+        
+        <guid>/tags/async/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Basic</title>
+        <link>/tags/basic/</link>
+        <pubDate>Tue, 15 Sep 2020 15:30:44 +0800</pubDate>
+        
+        <guid>/tags/basic/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>

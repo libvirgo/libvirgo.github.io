@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Note on </title>
+        <link>/tags/note/</link>
+        <description>Recent content in Note on </description>
+        <generator>Hugo -- gohugo.io</generator>
+        <lastBuildDate>Sat, 01 May 2021 00:50:44 +0800</lastBuildDate><atom:link href="/tags/note/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>逆变与协变</title>
+        <link>/post/programming_language/covariance_and_contravariance/</link>
+        <pubDate>Sat, 01 May 2021 00:50:44 +0800</pubDate>
+        
+        <guid>/post/programming_language/covariance_and_contravariance/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;逆变和协变看了忘忘了看, 这次学C#顺带查阅各处总结了下&amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;协变&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;协变是指能够使用比原始指定的类型派生程度更大的类型.&lt;/p&gt;
+&lt;p&gt;例如Dog与Cat继承自Animal, 那么从Dog-&amp;gt;Animal就称为协变, 那么协变有什么作用呢?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c#&#34; data-lang=&#34;c#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// Animal.cs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Animal&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Dog&lt;/span&gt; : Animal
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c#&#34; data-lang=&#34;c#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// Main.cs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; Main()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Dog dog = &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Dog();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Animal animal = dog;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    List&amp;lt;Dog&amp;gt; dogs = &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; List&amp;lt;Dog&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    List&amp;lt;Animal&amp;gt; animals = dogs; &lt;span style=&#34;color:#75715e&#34;&gt;// error&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Dog继承自Animal, 所以Dog可以隐式的转化为Animal, 但是List&lt;!-- raw HTML omitted --&gt;与List&lt;!-- raw HTML omitted --&gt;之间没有继承关系, 所以无法隐式转换, 如果想要隐式转换需要如下代码:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c#&#34; data-lang=&#34;c#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;List&amp;lt;Animal&amp;gt; animals = dogs.Select(d =&amp;gt; (Animal)d).ToList();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;将小狗列表中的小狗挨个显式转换为Animal.&lt;/p&gt;
+&lt;p&gt;所以C#提供了协变的语法糖, 也就是out, 意思是指该泛型可以作为输出返回.
+也就是说可以用如下代码:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c#&#34; data-lang=&#34;c#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// Main.cs &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; Main() 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{ 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Dog dog = &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; Dog(); 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Animal animal = dog; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    IEnumerable&amp;lt;Dog&amp;gt; dogs = &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; List&amp;lt;Dog&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    IEnumerable&amp;lt;Animal&amp;gt; animals = dogs;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// IEnumerable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;IEnumerable&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#66d9ef&#34;&gt;out&lt;/span&gt; T&amp;gt;: IEnumerable
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为T只能作为结果返回, 所以T不会被修改, 编译器可以帮我们进行强制转换.
+但实际上out只是上面强制转换的一个语法糖而已, 实际上反编译的代码依然进行的是强制类型转换.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c#&#34; data-lang=&#34;c#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;IEnumerable&amp;lt;Animal&amp;gt; animals = (IEnumerable&amp;lt;Animal&amp;gt;) dogs;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;至于为什么只能作为结果返回而不能作为输入呢?
+我们假设:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A ≼ B 意味着 A 是 B 的子类型.&lt;/li&gt;
+&lt;li&gt;A → B 指的是以 A 为参数类型, 以 B 为返回值类型的函数类型.&lt;/li&gt;
+&lt;li&gt;x : A 意味着 x 的类型为 A.
+假设我有如下三种类型:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Greyhound ≼ Dog ≼ Animal
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;问题: 以下哪种类型是 Dog → Dog 的子类型呢？&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Greyhound → Greyhound&lt;/li&gt;
+&lt;li&gt;Greyhound → Animal&lt;/li&gt;
+&lt;li&gt;Animal → Animal&lt;/li&gt;
+&lt;li&gt;Animal → Greyhound&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我们假设 f 是一个以 Dog → Dog 为参数的函数, 那么可以这样假设: f : (Dog → Dog) → String&lt;/p&gt;
+&lt;p&gt;那么容易回答上述问题:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;不是, 因为传入的类型可能是狗的其它自类型但不是灰狗, 这样也是符合函数签名的, 但是答案1就不符合了.&lt;/li&gt;
+&lt;li&gt;同上&lt;/li&gt;
+&lt;li&gt;不是, 因为有可能 f 在调用完参数之后让它的返回值(Animal)狗叫, 但是并非所有的动物都会狗叫, 所以同样存在符合函数签名但不是答案4的结果.&lt;/li&gt;
+&lt;li&gt;是的, 所有的Dog都是Animal, 所以传进去的任何Dog都是符合的, 而所有的Greyhoud都是狗, 也都可以狗叫.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这样就可以得到我们最初的答案了&amp;mdash;为什么只能作为结果返回而不能作为参数输入, 因为所有的Dog都是Animal, 但是如果作为参数的话, 那么不是所有的Animal都是Dog, 就有可能往IEnumerable&lt;!-- raw HTML omitted --&gt;里传一个Cat, 但这又是符合IEnumerable&lt;!-- raw HTML omitted --&gt;签名的, 所以是不行的.&lt;/p&gt;
+&lt;p&gt;而由上面的例子也可以得到, 与协变相反的就是逆变, 也就是超类可以作为泛型参数而不能作为输出结果, 简单的公式为:
+(Animal → Greyhound) ≼ (Dog → Dog)&lt;/p&gt;
+&lt;p&gt;解释为: 我们允许一个函数类型中, 返回值类型是协变的, 而参数类型是逆变的. 返回值类型是协变的, 意思是 A ≼ B 就意味着 (T → A) ≼ (T → B) . 参数类型是逆变的, 意思是 A ≼ B 就意味着 (B → T) ≼ (A → T)  A 和 B 的位置颠倒过来了, 通俗点协变就是返回值可以是超类, 而逆变则是参数可以是子类.&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
