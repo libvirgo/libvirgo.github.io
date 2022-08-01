@@ -1,437 +1,419 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>Basic on </title>
-        <link>/tags/basic/</link>
-        <description>Recent content in Basic on </description>
-        <generator>Hugo -- gohugo.io</generator>
-        <lastBuildDate>Tue, 15 Sep 2020 15:30:44 +0800</lastBuildDate><atom:link href="/tags/basic/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>优雅的Rust</title>
-        <link>/post/rust/elegent_rust/</link>
-        <pubDate>Tue, 15 Sep 2020 15:30:44 +0800</pubDate>
-        
-        <guid>/post/rust/elegent_rust/</guid>
-        <description>&lt;img src="/post/rust/elegent_rust/cover.png" alt="Featured image of post 优雅的Rust" /&gt;&lt;p&gt;小记自己为什么会学 &lt;code&gt;Rust&lt;/code&gt; . &lt;code&gt;Rust&lt;/code&gt; 有什么特性吸引到我了~&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;如果说 &lt;code&gt;C&lt;/code&gt; 语言是具备高灵活性, 信任着开发者, 将一切交给开发者来解决的话.&lt;/p&gt;
-&lt;p&gt;那么 &lt;code&gt;Rust&lt;/code&gt; 就是降低该灵活性, 毫不信任开发者, 将开发者的大部分错误都在编译期发掘出来, 强制要求开发者去了解可能存在的问题并解决掉它.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;C&lt;/code&gt; 语言可能条条大路通罗马,  &lt;code&gt;Rust&lt;/code&gt; 可能只有寥寥无几的道路.&lt;/p&gt;
-&lt;p&gt;总之, &lt;code&gt;Rust&lt;/code&gt; 拔高了开发者的下限, 如果水平不够是连编译器都不会通过的, 更不要说 &lt;code&gt;commit&lt;/code&gt; 了.&lt;/p&gt;
-&lt;h1 id=&#34;优雅的rust&#34;&gt;优雅的Rust&lt;/h1&gt;
-&lt;p&gt;听说到 &lt;code&gt;Rust&lt;/code&gt; 最多的自然是所谓的内存安全. 那么什么是内存安全？ 内存安全体现在哪里呢？&lt;/p&gt;
-&lt;p&gt;比如说这段 &lt;code&gt;C语言&lt;/code&gt; 代码.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; a[&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;a[&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;, a[&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;]);
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段代码能正确输出 &lt;code&gt;a[6]&lt;/code&gt; 吗?&lt;/p&gt;
-&lt;p&gt;答案是可以的, 虽然它很明显的内存越界了, 但内存越界似乎在 &lt;code&gt;C&lt;/code&gt; 里并不是什么&lt;code&gt;大不了&lt;/code&gt;的事, 编写的代码随便越界, 只不过导致的后果需要自己承担而已.&lt;/p&gt;
-&lt;p&gt;当然现今大部分的高级语言对指针越界都会有很明确的编译错误, 所以仅这点来看并不能体现出 &lt;code&gt;Rust&lt;/code&gt; 的特点, 只不过是有了现代语言该有的东西——内存越界提示.&lt;/p&gt;
-&lt;p&gt;那么有什么可以体现出 &lt;code&gt;Rust&lt;/code&gt; 独有特性的地方呢?&lt;/p&gt;
-&lt;p&gt;参考这一段结构体.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; Node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;next;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; val;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}Node;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;head;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;tail;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; size;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}LinkedList;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;push)(&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; LinkedList &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;self, Node val);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;peek)(&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; LinkedList &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;self);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;pop)(&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; LinkedList &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;self);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}StackMethod;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这是一个简单的数据结构栈, 在栈方法中定义了三个函数指针, 不需要关注 &lt;code&gt;push&lt;/code&gt; 方法, 来看看 &lt;code&gt;peek&lt;/code&gt; 方法.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;peek&lt;/code&gt; 方法将栈中的尾结点返回, 和 &lt;code&gt;pop&lt;/code&gt; 方法的区别是它不会从链表中删除该节点. 但此时该方法的调用者拥有了该节点的所有权限, 如果调用者此时又释放了该地址指向的内存, 当再次调用 &lt;code&gt;pop&lt;/code&gt; 方法时, &lt;code&gt;pop&lt;/code&gt; 方法将返回一个已经释放了内存的结点指针, 此时如果访问该结点大概率会出现 &lt;code&gt;Segementation fault&lt;/code&gt;. 因为访问了一个没有分配的内存空间. &lt;code&gt;Segementation fault&lt;/code&gt; 大概是我写 &lt;code&gt;C&lt;/code&gt; 时候最讨厌的错误了.&lt;/p&gt;
-&lt;p&gt;那么 &lt;code&gt;Rust&lt;/code&gt; 是如何解决的呢? 答案是&lt;code&gt;所有权&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;所有权&#34;&gt;所有权&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; String::from(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; s1;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在将 &lt;code&gt;s1&lt;/code&gt; 赋值给 &lt;code&gt;s2&lt;/code&gt; 后, 此时 &lt;code&gt;s1&lt;/code&gt; 就已经是无效的了, 它的作用域仅到赋值给 &lt;code&gt;s2&lt;/code&gt; 之前为止.&lt;/p&gt;
-&lt;p&gt;同样类似的.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;: String) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hello(s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s1);  &lt;span style=&#34;color:#75715e&#34;&gt;// error
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这段相等同的 &lt;code&gt;C&lt;/code&gt; 代码会有问题么?&lt;/p&gt;
-&lt;p&gt;可能会有问题. 如果在 &lt;code&gt;hello&lt;/code&gt; 中释放了内存, 那么 &lt;code&gt;main&lt;/code&gt; 函数中后续对 &lt;code&gt;s1&lt;/code&gt; 的访问就会出现段错误. 就像这样:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; str) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, str);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    free(str);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; s1[&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; { &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;h&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;e&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;l&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;l&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hello(s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;Rust&lt;/code&gt; 中就完全避免了这种情况, 这样的代码在Rust中连编译都不会通过的.&lt;/p&gt;
-&lt;p&gt;那么 &lt;code&gt;main&lt;/code&gt; 函数后续不能再用该变量了吗? 有两种方法可以解决该问题.&lt;/p&gt;
-&lt;p&gt;可以将 &lt;code&gt;hello&lt;/code&gt; 函数的签名增加个返回值, 使用完变量后将其所有权返回给调用者. &lt;code&gt;main&lt;/code&gt; 函数也需要提供一个接收者接收该变量的所有, 该做法使用了 &lt;code&gt;Rust&lt;/code&gt; 变量覆盖的特性, 可以声明同名变量, 就跟 &lt;code&gt;Javascript&lt;/code&gt; 类似. 后续声明的同名变量会覆盖先前的.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;: String) -&amp;gt;String {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; hello(s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一种是个很自然而且很容易想到并理解的做法( &lt;code&gt;Rust&lt;/code&gt; 中函数块最后一行且没有带分号的会被当做返回值, 所以可以省略掉 &lt;code&gt;return&lt;/code&gt; ). 还有另一种做法, 那就是引用.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;String) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hello(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用  &lt;code&gt;&amp;amp;&lt;/code&gt; 表示一个引用或引用类型, &lt;code&gt;*&lt;/code&gt; 则表现为消除 &lt;code&gt;&amp;amp;&lt;/code&gt;, 也就是解引用. 用法类似与 &lt;code&gt;C&lt;/code&gt; 中的指针. 而在 &lt;code&gt;Rust&lt;/code&gt; 中是会自动解引用的, 所以 &lt;code&gt;hello&lt;/code&gt; 函数也可以改为:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;String){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;C&lt;/code&gt; 中可能存在的野指针问题在 &lt;code&gt;Rust&lt;/code&gt; 中也可以通过所有权系统来解决.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;野指针主要为未初始化或释放后未置空或操作超越变量作用域.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;参照如下 &lt;code&gt;C&lt;/code&gt; 代码:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;)malloc(&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    free(p);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;)malloc(&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;q = %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;q);  &lt;span style=&#34;color:#75715e&#34;&gt;//此处打印 q = 2
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;q = %d&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;q);  &lt;span style=&#34;color:#75715e&#34;&gt;//此处打印 q = 4
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;是不是很神奇. 那么为什么会出现这种现象?&lt;/p&gt;
-&lt;p&gt;因为在 &lt;code&gt;C&lt;/code&gt; 中使用 &lt;code&gt;malloc&lt;/code&gt; 分配内存的时候, 会优先分配前次释放的内存, 所以两处调用 &lt;code&gt;malloc&lt;/code&gt; 所得到的地址是一样的. 在释放 &lt;code&gt;p&lt;/code&gt; 之后, 没有对 &lt;code&gt;p&lt;/code&gt; 进行赋空操作, 此时 &lt;code&gt;p&lt;/code&gt; 就成了一个野指针. 然后接着又分配了一个跟前序 &lt;code&gt;p&lt;/code&gt; 一样大小的内存空间, 此时 &lt;code&gt;p&lt;/code&gt; 和 &lt;code&gt;q&lt;/code&gt; 就是一样的了——指向相同的地址. 所以对 &lt;code&gt;p&lt;/code&gt; 指向的值进行的修改会反映在 &lt;code&gt;q&lt;/code&gt; 上. 虽然简单的在释放 &lt;code&gt;p&lt;/code&gt; 后给其赋值为 &lt;code&gt;NULL&lt;/code&gt; 就可以了, 但是如果有个人疏忽了呢? 毕竟人是不会永远不犯错的. 在 &lt;code&gt;Rust&lt;/code&gt; 中类似这样的代码是不可能通过的, 因为在释放 &lt;code&gt;p&lt;/code&gt; 的时候所有权已经转移给 &lt;code&gt;free&lt;/code&gt; 函数了,  &lt;code&gt;main&lt;/code&gt;函数后续是不能再使用的.&lt;/p&gt;
-&lt;p&gt;不管是学过 &lt;code&gt;Java&lt;/code&gt; 的还是学过 &lt;code&gt;C&lt;/code&gt; 的, 肯定都多多少少了解过关于引用传递和值传递, 有相当多的教学声明 &lt;code&gt;Java&lt;/code&gt; 中仅存在值传递.&lt;/p&gt;
-&lt;p&gt;在 &lt;code&gt;C&lt;/code&gt; 语言中指针则类似于引用传递, 通过地址引用指向内存空间的值. 因为有地址所以可以修改其中的值并且被其它函数观察到. 传递引用有一个问题, 有时候我们并不想别人改变我们的值, 但又不得不声明为指针(比如说结构体的自引用), 同时又忘了给该参数声明为 &lt;code&gt;const&lt;/code&gt; , 这样就会有很多问题. 尤其在初学 &lt;code&gt;C&lt;/code&gt; 的时候, 几乎很少有人会用到 &lt;code&gt;const&lt;/code&gt; 关键词. 很多人是不晓得该关键词到底有多么重要的, 而 &lt;code&gt;Rust&lt;/code&gt; 就会强迫我们去学习, 了解不可变的重要性.&lt;/p&gt;
-&lt;p&gt;那么很自然的就过渡到下一个阶段~&lt;/p&gt;
-&lt;h2 id=&#34;可变性与不可变性&#34;&gt;可变性与不可变性&lt;/h2&gt;
-&lt;p&gt;然而在 &lt;code&gt;Rust&lt;/code&gt; 中所有的变量如果不显式声明, 那就是不可修改的( &lt;code&gt;unsafe&lt;/code&gt; 是特例). 所以如果要传递一个可变引用, 就需要如下的声明:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;mut&lt;/span&gt; String) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;.push_str(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;world&amp;#34;&lt;/span&gt;); &lt;span style=&#34;color:#75715e&#34;&gt;//3. 修改str的值.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string(); &lt;span style=&#34;color:#75715e&#34;&gt;//1. 此处声明s1是可变的变量.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    hello(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; s1);  &lt;span style=&#34;color:#75715e&#34;&gt;//2. 传递一个可变引用给hello函数.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;显式声明 &lt;code&gt;str&lt;/code&gt; 是可变的, 否则对变量做的任何修改在编译期都是无法通过的. 这就避免了很多 &lt;code&gt;Code&lt;/code&gt; 时的隐性错误.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Rust&lt;/code&gt; 中关于该特性有几个关键点.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;变量可以有多个不可变引用.&lt;/li&gt;
-&lt;li&gt;变量只能有一个可变引用.&lt;/li&gt;
-&lt;li&gt;变量有可变引用的同时不能有不可变引用.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;比如如下代码:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;s1;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hello(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s2);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译时会报错&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;error[E0502]: cannot borrow &lt;code&gt;s1&lt;/code&gt; as mutable because it is also borrowed as immutable&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;错误提示相当友好了, 不能将 &lt;code&gt;s1&lt;/code&gt; 作为可变引用因为它已经有一个不可变引用了. 为什么要这么设计?&lt;/p&gt;
-&lt;p&gt;可以想象一下在 &lt;code&gt;C&lt;/code&gt; 中, 编写了一个返回指针的函数, 有多个不同调用方或许都对指向的值进行了修改, 某个调用方又如何知道该值是否是最初的函数所返回的呢? 还是因为各个调用方可能进行的修改后的结果. 解决方法肯定是有的, 比如说注意一下各个调用方的顺序之类的, 只是有时项目庞大而复杂, 是没法顾及到方方面面, 这时是需要有个 &amp;ldquo;人&amp;rdquo; 来提醒一下我们.&lt;/p&gt;
-&lt;p&gt;因此, 可变引用与不可变引用直接是互斥的, 不可变引用之间也是互斥的, 它们不能同时存在.&lt;/p&gt;
-&lt;p&gt;上面的代码调换一下位置就可以了.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; s1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hello(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;s1;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s1);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, s2);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此时在 &lt;code&gt;s2&lt;/code&gt; 声明的位置, &lt;code&gt;s1&lt;/code&gt; 的可变引用的作用域已经结束, 现在 &lt;code&gt;s1&lt;/code&gt; 是没有其它引用的, 所以可以拿到其的一个引用.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在这里, 为了引入个下一话题, 我们不自然地回顾一下上一章节的野指针问题~&lt;/p&gt;
-&lt;p&gt;类似的如下 &lt;code&gt;C&lt;/code&gt; 代码:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;dangle&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; a[&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, a);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; a;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dangle();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, p);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在函数结束的时候变量 &lt;code&gt;a&lt;/code&gt; 已经被销毁, 将该地址返回就会产生野指针.&lt;/p&gt;
-&lt;p&gt;如何修正该代码?&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;dangle&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, a);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; a;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dangle();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, p);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样就可以了.这样所声明的变量 &lt;code&gt;a&lt;/code&gt; 实际上为字符串常量, 是不可变的, 存储在静态存储区. 由程序结束后操作系统回收该部分内存. 所以在函数结束后 &lt;code&gt;a&lt;/code&gt; 指向的值是不会被销毁的. 将该地址返回也是完全没有错误的.&lt;/p&gt;
-&lt;p&gt;这些细枝末节在初学 &lt;code&gt;C&lt;/code&gt; 的时候是很难注意到的. 毕竟大多数大学生使用的教材还是谭浩强版, 用于应试是够了, 实际开发是远远不行的.&lt;/p&gt;
-&lt;p&gt;如果在 &lt;code&gt;Rust&lt;/code&gt; 中写出这样的代码呢?&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; reference_to_nothing &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dangle();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dangle&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;String {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; String::from(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;s
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;首先说点题外话, 在 &lt;code&gt;Rust&lt;/code&gt; 中命名通常用蛇形命名法, 不像 &lt;code&gt;Java&lt;/code&gt; 中普遍的是大驼峰和小驼峰. 至于好看与否, 看眼缘吧~&lt;/p&gt;
-&lt;p&gt;这里同样的编译是不能通过的.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;error[E0106]: missing lifetime specifier
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Basic on</title><link>/tags/basic/</link><description>Recent content in Basic on</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 15 Sep 2020 15:30:44 +0800</lastBuildDate><atom:link href="/tags/basic/index.xml" rel="self" type="application/rss+xml"/><item><title>优雅的Rust</title><link>/post/rust/elegent_rust/</link><pubDate>Tue, 15 Sep 2020 15:30:44 +0800</pubDate><guid>/post/rust/elegent_rust/</guid><description>&lt;img src="/post/rust/elegent_rust/cover.png" alt="Featured image of post 优雅的Rust" />&lt;p>小记自己为什么会学 &lt;code>Rust&lt;/code> . &lt;code>Rust&lt;/code> 有什么特性吸引到我了~&lt;/p>
+&lt;hr>
+&lt;p>如果说 &lt;code>C&lt;/code> 语言是具备高灵活性, 信任着开发者, 将一切交给开发者来解决的话.&lt;/p>
+&lt;p>那么 &lt;code>Rust&lt;/code> 就是降低该灵活性, 毫不信任开发者, 将开发者的大部分错误都在编译期发掘出来, 强制要求开发者去了解可能存在的问题并解决掉它.&lt;/p>
+&lt;p>&lt;code>C&lt;/code> 语言可能条条大路通罗马, &lt;code>Rust&lt;/code> 可能只有寥寥无几的道路.&lt;/p>
+&lt;p>总之, &lt;code>Rust&lt;/code> 拔高了开发者的下限, 如果水平不够是连编译器都不会通过的, 更不要说 &lt;code>commit&lt;/code> 了.&lt;/p>
+&lt;h1 id="优雅的rust">优雅的Rust&lt;/h1>
+&lt;p>听说到 &lt;code>Rust&lt;/code> 最多的自然是所谓的内存安全. 那么什么是内存安全？ 内存安全体现在哪里呢？&lt;/p>
+&lt;p>比如说这段 &lt;code>C语言&lt;/code> 代码.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> a[&lt;span style="color:#ae81ff">5&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>a[&lt;span style="color:#ae81ff">6&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">6&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>printf(&lt;span style="color:#e6db74">&amp;#34;%d&amp;#34;&lt;/span>, a[&lt;span style="color:#ae81ff">6&lt;/span>]);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这段代码能正确输出 &lt;code>a[6]&lt;/code> 吗?&lt;/p>
+&lt;p>答案是可以的, 虽然它很明显的内存越界了, 但内存越界似乎在 &lt;code>C&lt;/code> 里并不是什么&lt;code>大不了&lt;/code>的事, 编写的代码随便越界, 只不过导致的后果需要自己承担而已.&lt;/p>
+&lt;p>当然现今大部分的高级语言对指针越界都会有很明确的编译错误, 所以仅这点来看并不能体现出 &lt;code>Rust&lt;/code> 的特点, 只不过是有了现代语言该有的东西——内存越界提示.&lt;/p>
+&lt;p>那么有什么可以体现出 &lt;code>Rust&lt;/code> 独有特性的地方呢?&lt;/p>
+&lt;p>参考这一段结构体.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">typedef&lt;/span> &lt;span style="color:#66d9ef">struct&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">struct&lt;/span> Node &lt;span style="color:#f92672">*&lt;/span>next;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> val;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}Node;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">typedef&lt;/span> &lt;span style="color:#66d9ef">struct&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Node &lt;span style="color:#f92672">*&lt;/span>head;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Node &lt;span style="color:#f92672">*&lt;/span>tail;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> size;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}LinkedList;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">struct&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">void&lt;/span> (&lt;span style="color:#f92672">*&lt;/span>push)(&lt;span style="color:#66d9ef">struct&lt;/span> LinkedList &lt;span style="color:#f92672">*&lt;/span>self, Node val);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Node &lt;span style="color:#f92672">*&lt;/span>(&lt;span style="color:#f92672">*&lt;/span>peek)(&lt;span style="color:#66d9ef">struct&lt;/span> LinkedList &lt;span style="color:#f92672">*&lt;/span>self);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Node &lt;span style="color:#f92672">*&lt;/span>(&lt;span style="color:#f92672">*&lt;/span>pop)(&lt;span style="color:#66d9ef">struct&lt;/span> LinkedList &lt;span style="color:#f92672">*&lt;/span>self);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}StackMethod;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这是一个简单的数据结构栈, 在栈方法中定义了三个函数指针, 不需要关注 &lt;code>push&lt;/code> 方法, 来看看 &lt;code>peek&lt;/code> 方法.&lt;/p>
+&lt;p>&lt;code>peek&lt;/code> 方法将栈中的尾结点返回, 和 &lt;code>pop&lt;/code> 方法的区别是它不会从链表中删除该节点. 但此时该方法的调用者拥有了该节点的所有权限, 如果调用者此时又释放了该地址指向的内存, 当再次调用 &lt;code>pop&lt;/code> 方法时, &lt;code>pop&lt;/code> 方法将返回一个已经释放了内存的结点指针, 此时如果访问该结点大概率会出现 &lt;code>Segementation fault&lt;/code>. 因为访问了一个没有分配的内存空间. &lt;code>Segementation fault&lt;/code> 大概是我写 &lt;code>C&lt;/code> 时候最讨厌的错误了.&lt;/p>
+&lt;p>那么 &lt;code>Rust&lt;/code> 是如何解决的呢? 答案是&lt;code>所有权&lt;/code>.&lt;/p>
+&lt;h2 id="所有权">所有权&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> String::from(&lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s2 &lt;span style="color:#f92672">=&lt;/span> s1;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在将 &lt;code>s1&lt;/code> 赋值给 &lt;code>s2&lt;/code> 后, 此时 &lt;code>s1&lt;/code> 就已经是无效的了, 它的作用域仅到赋值给 &lt;code>s2&lt;/code> 之前为止.&lt;/p>
+&lt;p>同样类似的.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>(&lt;span style="color:#66d9ef">str&lt;/span>: String) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">str&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> hello(s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s1); &lt;span style="color:#75715e">// error
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这段相等同的 &lt;code>C&lt;/code> 代码会有问题么?&lt;/p>
+&lt;p>可能会有问题. 如果在 &lt;code>hello&lt;/code> 中释放了内存, 那么 &lt;code>main&lt;/code> 函数中后续对 &lt;code>s1&lt;/code> 的访问就会出现段错误. 就像这样:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>(&lt;span style="color:#66d9ef">char&lt;/span>&lt;span style="color:#f92672">*&lt;/span> str) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;%s&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, str);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> free(str);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">char&lt;/span> s1[&lt;span style="color:#ae81ff">5&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> { &lt;span style="color:#e6db74">&amp;#39;h&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;e&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;l&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;l&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;o&amp;#39;&lt;/span>};
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> hello(s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;%s&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在 &lt;code>Rust&lt;/code> 中就完全避免了这种情况, 这样的代码在Rust中连编译都不会通过的.&lt;/p>
+&lt;p>那么 &lt;code>main&lt;/code> 函数后续不能再用该变量了吗? 有两种方法可以解决该问题.&lt;/p>
+&lt;p>可以将 &lt;code>hello&lt;/code> 函数的签名增加个返回值, 使用完变量后将其所有权返回给调用者. &lt;code>main&lt;/code> 函数也需要提供一个接收者接收该变量的所有, 该做法使用了 &lt;code>Rust&lt;/code> 变量覆盖的特性, 可以声明同名变量, 就跟 &lt;code>Javascript&lt;/code> 类似. 后续声明的同名变量会覆盖先前的.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>(&lt;span style="color:#66d9ef">str&lt;/span>: String) -&amp;gt;String {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">str&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">str&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> hello(s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>第一种是个很自然而且很容易想到并理解的做法( &lt;code>Rust&lt;/code> 中函数块最后一行且没有带分号的会被当做返回值, 所以可以省略掉 &lt;code>return&lt;/code> ). 还有另一种做法, 那就是引用.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>(&lt;span style="color:#66d9ef">str&lt;/span>: &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>String) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, &lt;span style="color:#f92672">*&lt;/span>&lt;span style="color:#66d9ef">str&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> hello(&lt;span style="color:#f92672">&amp;amp;&lt;/span>s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>使用 &lt;code>&amp;amp;&lt;/code> 表示一个引用或引用类型, &lt;code>*&lt;/code> 则表现为消除 &lt;code>&amp;amp;&lt;/code>, 也就是解引用. 用法类似与 &lt;code>C&lt;/code> 中的指针. 而在 &lt;code>Rust&lt;/code> 中是会自动解引用的, 所以 &lt;code>hello&lt;/code> 函数也可以改为:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>(&lt;span style="color:#66d9ef">str&lt;/span>: &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>String){
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">str&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在 &lt;code>C&lt;/code> 中可能存在的野指针问题在 &lt;code>Rust&lt;/code> 中也可以通过所有权系统来解决.&lt;/p>
+&lt;blockquote>
+&lt;p>野指针主要为未初始化或释放后未置空或操作超越变量作用域.&lt;/p>
+&lt;/blockquote>
+&lt;p>参照如下 &lt;code>C&lt;/code> 代码:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#include&lt;/span> &lt;span style="color:#75715e">&amp;lt;stdio.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#include&lt;/span> &lt;span style="color:#75715e">&amp;lt;stdlib.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>(&lt;span style="color:#66d9ef">void&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#f92672">*&lt;/span>p &lt;span style="color:#f92672">=&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#f92672">*&lt;/span>)malloc(&lt;span style="color:#ae81ff">4&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">*&lt;/span>p &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">4&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> free(p);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#f92672">*&lt;/span>q &lt;span style="color:#f92672">=&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#f92672">*&lt;/span>)malloc(&lt;span style="color:#ae81ff">4&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">*&lt;/span>q &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">2&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;q = %d&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, &lt;span style="color:#f92672">*&lt;/span>q); &lt;span style="color:#75715e">//此处打印 q = 2
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#f92672">*&lt;/span>p &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">4&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;q = %d&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, &lt;span style="color:#f92672">*&lt;/span>q); &lt;span style="color:#75715e">//此处打印 q = 4
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>是不是很神奇. 那么为什么会出现这种现象?&lt;/p>
+&lt;p>因为在 &lt;code>C&lt;/code> 中使用 &lt;code>malloc&lt;/code> 分配内存的时候, 会优先分配前次释放的内存, 所以两处调用 &lt;code>malloc&lt;/code> 所得到的地址是一样的. 在释放 &lt;code>p&lt;/code> 之后, 没有对 &lt;code>p&lt;/code> 进行赋空操作, 此时 &lt;code>p&lt;/code> 就成了一个野指针. 然后接着又分配了一个跟前序 &lt;code>p&lt;/code> 一样大小的内存空间, 此时 &lt;code>p&lt;/code> 和 &lt;code>q&lt;/code> 就是一样的了——指向相同的地址. 所以对 &lt;code>p&lt;/code> 指向的值进行的修改会反映在 &lt;code>q&lt;/code> 上. 虽然简单的在释放 &lt;code>p&lt;/code> 后给其赋值为 &lt;code>NULL&lt;/code> 就可以了, 但是如果有个人疏忽了呢? 毕竟人是不会永远不犯错的. 在 &lt;code>Rust&lt;/code> 中类似这样的代码是不可能通过的, 因为在释放 &lt;code>p&lt;/code> 的时候所有权已经转移给 &lt;code>free&lt;/code> 函数了, &lt;code>main&lt;/code>函数后续是不能再使用的.&lt;/p>
+&lt;p>不管是学过 &lt;code>Java&lt;/code> 的还是学过 &lt;code>C&lt;/code> 的, 肯定都多多少少了解过关于引用传递和值传递, 有相当多的教学声明 &lt;code>Java&lt;/code> 中仅存在值传递.&lt;/p>
+&lt;p>在 &lt;code>C&lt;/code> 语言中指针则类似于引用传递, 通过地址引用指向内存空间的值. 因为有地址所以可以修改其中的值并且被其它函数观察到. 传递引用有一个问题, 有时候我们并不想别人改变我们的值, 但又不得不声明为指针(比如说结构体的自引用), 同时又忘了给该参数声明为 &lt;code>const&lt;/code> , 这样就会有很多问题. 尤其在初学 &lt;code>C&lt;/code> 的时候, 几乎很少有人会用到 &lt;code>const&lt;/code> 关键词. 很多人是不晓得该关键词到底有多么重要的, 而 &lt;code>Rust&lt;/code> 就会强迫我们去学习, 了解不可变的重要性.&lt;/p>
+&lt;p>那么很自然的就过渡到下一个阶段~&lt;/p>
+&lt;h2 id="可变性与不可变性">可变性与不可变性&lt;/h2>
+&lt;p>然而在 &lt;code>Rust&lt;/code> 中所有的变量如果不显式声明, 那就是不可修改的( &lt;code>unsafe&lt;/code> 是特例). 所以如果要传递一个可变引用, 就需要如下的声明:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">hello&lt;/span>(&lt;span style="color:#66d9ef">str&lt;/span>: &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>&lt;span style="color:#a6e22e">mut&lt;/span> String) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, &lt;span style="color:#66d9ef">str&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">str&lt;/span>.push_str(&lt;span style="color:#e6db74">&amp;#34;world&amp;#34;&lt;/span>); &lt;span style="color:#75715e">//3. 修改str的值.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> &lt;span style="color:#66d9ef">mut&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string(); &lt;span style="color:#75715e">//1. 此处声明s1是可变的变量.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> hello(&lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">mut&lt;/span> s1); &lt;span style="color:#75715e">//2. 传递一个可变引用给hello函数.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>显式声明 &lt;code>str&lt;/code> 是可变的, 否则对变量做的任何修改在编译期都是无法通过的. 这就避免了很多 &lt;code>Code&lt;/code> 时的隐性错误.&lt;/p>
+&lt;p>&lt;code>Rust&lt;/code> 中关于该特性有几个关键点.&lt;/p>
+&lt;ol>
+&lt;li>变量可以有多个不可变引用.&lt;/li>
+&lt;li>变量只能有一个可变引用.&lt;/li>
+&lt;li>变量有可变引用的同时不能有不可变引用.&lt;/li>
+&lt;/ol>
+&lt;p>比如如下代码:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> &lt;span style="color:#66d9ef">mut&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s2 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>s1;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> hello(&lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">mut&lt;/span> s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s2);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>编译时会报错&lt;/p>
+&lt;blockquote>
+&lt;p>error[E0502]: cannot borrow &lt;code>s1&lt;/code> as mutable because it is also borrowed as immutable&lt;/p>
+&lt;/blockquote>
+&lt;p>错误提示相当友好了, 不能将 &lt;code>s1&lt;/code> 作为可变引用因为它已经有一个不可变引用了. 为什么要这么设计?&lt;/p>
+&lt;p>可以想象一下在 &lt;code>C&lt;/code> 中, 编写了一个返回指针的函数, 有多个不同调用方或许都对指向的值进行了修改, 某个调用方又如何知道该值是否是最初的函数所返回的呢? 还是因为各个调用方可能进行的修改后的结果. 解决方法肯定是有的, 比如说注意一下各个调用方的顺序之类的, 只是有时项目庞大而复杂, 是没法顾及到方方面面, 这时是需要有个 &amp;ldquo;人&amp;rdquo; 来提醒一下我们.&lt;/p>
+&lt;p>因此, 可变引用与不可变引用直接是互斥的, 不可变引用之间也是互斥的, 它们不能同时存在.&lt;/p>
+&lt;p>上面的代码调换一下位置就可以了.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> &lt;span style="color:#66d9ef">mut&lt;/span> s1 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> hello(&lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">mut&lt;/span> s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s2 &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>s1;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s1);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, s2);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>此时在 &lt;code>s2&lt;/code> 声明的位置, &lt;code>s1&lt;/code> 的可变引用的作用域已经结束, 现在 &lt;code>s1&lt;/code> 是没有其它引用的, 所以可以拿到其的一个引用.&lt;/p>
+&lt;hr>
+&lt;p>在这里, 为了引入个下一话题, 我们不自然地回顾一下上一章节的野指针问题~&lt;/p>
+&lt;p>类似的如下 &lt;code>C&lt;/code> 代码:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#include&lt;/span> &lt;span style="color:#75715e">&amp;lt;stdio.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>&lt;span style="color:#a6e22e">dangle&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">char&lt;/span> a[&lt;span style="color:#ae81ff">3&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;abc&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;%s&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, a);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> a;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>(&lt;span style="color:#66d9ef">void&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>p &lt;span style="color:#f92672">=&lt;/span> dangle();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;%s&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, p);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在函数结束的时候变量 &lt;code>a&lt;/code> 已经被销毁, 将该地址返回就会产生野指针.&lt;/p>
+&lt;p>如何修正该代码?&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#include&lt;/span> &lt;span style="color:#75715e">&amp;lt;stdio.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>&lt;span style="color:#a6e22e">dangle&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>a &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&amp;#34;abc&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;%s&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, a);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> a;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>(&lt;span style="color:#66d9ef">void&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>p &lt;span style="color:#f92672">=&lt;/span> dangle();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> printf(&lt;span style="color:#e6db74">&amp;#34;%s&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, p);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这样就可以了.这样所声明的变量 &lt;code>a&lt;/code> 实际上为字符串常量, 是不可变的, 存储在静态存储区. 由程序结束后操作系统回收该部分内存. 所以在函数结束后 &lt;code>a&lt;/code> 指向的值是不会被销毁的. 将该地址返回也是完全没有错误的.&lt;/p>
+&lt;p>这些细枝末节在初学 &lt;code>C&lt;/code> 的时候是很难注意到的. 毕竟大多数大学生使用的教材还是谭浩强版, 用于应试是够了, 实际开发是远远不行的.&lt;/p>
+&lt;p>如果在 &lt;code>Rust&lt;/code> 中写出这样的代码呢?&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> reference_to_nothing &lt;span style="color:#f92672">=&lt;/span> dangle();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">dangle&lt;/span>() -&amp;gt; &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>String {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> s &lt;span style="color:#f92672">=&lt;/span> String::from(&lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>s
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>首先说点题外话, 在 &lt;code>Rust&lt;/code> 中命名通常用蛇形命名法, 不像 &lt;code>Java&lt;/code> 中普遍的是大驼峰和小驼峰. 至于好看与否, 看眼缘吧~&lt;/p>
+&lt;p>这里同样的编译是不能通过的.&lt;/p>
+&lt;blockquote>
+&lt;p>error[E0106]: missing lifetime specifier
 &amp;ndash;&amp;gt; src\main.rs:5:16
 |
 5 | fn dangle() -&amp;gt; &amp;amp;String {
-|                ^ expected named lifetime parameter
+| ^ expected named lifetime parameter
 |
 = help: this function&amp;rsquo;s return type contains a borrowed value, but there is no value for it to be borrowed from
-help: consider using the &lt;code&gt;&#39;static&lt;/code&gt; lifetime
+help: consider using the &lt;code>'static&lt;/code> lifetime
 |
 5 | fn dangle() -&amp;gt; &amp;amp;&amp;lsquo;static String {
-|                ^^^^^^^^&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;可以说相当友好了, 编译器同时提示了错误是什么, 以及该如何解决它.&lt;/p&gt;
-&lt;p&gt;该错误说明了该函数缺少生命周期指示符. 帮助说明了该函数返回的值包含了一个引用值, 但是这种类型是没有可以用来借用的, 需要考虑加上 &lt;code&gt;&#39;static&lt;/code&gt; 生命周期, 这样就杜绝了返回局部变量引用的情况.&lt;/p&gt;
-&lt;p&gt;这样就引入了下一个话题~&lt;/p&gt;
-&lt;h2 id=&#34;生命周期&#34;&gt;生命周期&lt;/h2&gt;
-&lt;p&gt;以下内容主要参考 &lt;a class=&#34;link&#34; href=&#34;https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;The Rust Programming Language&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;生命周期只是一个标签, 语法是&lt;code&gt;&#39;&lt;/code&gt;+字符串/字符. 比如 &lt;code&gt;&#39;a&lt;/code&gt;, &lt;code&gt;&#39;b&lt;/code&gt;. &lt;code&gt;&#39;static&lt;/code&gt; 是一个特殊的生命周期, 表示静态存储, 类似于 &lt;code&gt;Java&lt;/code&gt; 和 &lt;code&gt;C\C++&lt;/code&gt; 中的 &lt;code&gt;static&lt;/code&gt;, 也就是一直存活到程序结束运行才会销毁.&lt;/p&gt;
-&lt;p&gt;生命周期主要是为了避免悬垂引用(野指针), 在 &lt;code&gt;Rust编译器&lt;/code&gt; 中实现了一个借用检查器, 通过比较作用域来确保所有借用的有效性.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; r;                &lt;span style=&#34;color:#75715e&#34;&gt;// ---------+-- &amp;#39;a
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    {                     &lt;span style=&#34;color:#75715e&#34;&gt;//          |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;;        &lt;span style=&#34;color:#75715e&#34;&gt;// -+-- &amp;#39;b  |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;x;           &lt;span style=&#34;color:#75715e&#34;&gt;//  |       |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    }                     &lt;span style=&#34;color:#75715e&#34;&gt;// -+       |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r: {}&amp;#34;&lt;/span&gt;, r); &lt;span style=&#34;color:#75715e&#34;&gt;//          |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}                         &lt;span style=&#34;color:#75715e&#34;&gt;// ---------+  
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里 &lt;code&gt;r&lt;/code&gt; 的生命周期为 &lt;code&gt;&#39;a&lt;/code&gt;, &lt;code&gt;x&lt;/code&gt; 的生命周期为 &lt;code&gt;&#39;b&lt;/code&gt; ,  &lt;code&gt;&#39;b&lt;/code&gt; 的范围小于 &lt;code&gt;&#39;a&lt;/code&gt; 的范围, 由于 &lt;code&gt;r&lt;/code&gt; 引用了一个存活范围小于它的变量, 所以会编译失败.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;;            &lt;span style=&#34;color:#75715e&#34;&gt;// ----------+-- &amp;#39;b
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;x;           &lt;span style=&#34;color:#75715e&#34;&gt;// --+-- &amp;#39;a  |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r: {}&amp;#34;&lt;/span&gt;, r); &lt;span style=&#34;color:#75715e&#34;&gt;//   |       |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                          &lt;span style=&#34;color:#75715e&#34;&gt;// --+       |
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}                         &lt;span style=&#34;color:#75715e&#34;&gt;// ----------+
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;改为这样子, 因为 &lt;code&gt;r&lt;/code&gt; 的生命周期 &lt;code&gt;&#39;a&lt;/code&gt; 小于 &lt;code&gt;&#39;b&lt;/code&gt; , 这样就能保证在 &lt;code&gt;r&lt;/code&gt; 有效的时候 &lt;code&gt;x&lt;/code&gt; 总是有效的, 这样 &lt;code&gt;r&lt;/code&gt; 就不可能变成一个野指针.&lt;/p&gt;
-&lt;p&gt;考虑这样一个函数:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;longest&lt;/span&gt;(x: &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;, y: &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;str&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x.len() &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; y.len() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        x
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; string1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; String::from(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;long string is long&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; string2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; String::from(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xyz&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; longest(string1.as_str(), string2.as_str());
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The longest string is {}&amp;#34;&lt;/span&gt;, result);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;乍看之下没有什么问题对吧? 但是编译还是不通过.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;error[E0106]: missing lifetime specifier
+| ^^^^^^^^&lt;/p>
+&lt;/blockquote>
+&lt;p>可以说相当友好了, 编译器同时提示了错误是什么, 以及该如何解决它.&lt;/p>
+&lt;p>该错误说明了该函数缺少生命周期指示符. 帮助说明了该函数返回的值包含了一个引用值, 但是这种类型是没有可以用来借用的, 需要考虑加上 &lt;code>'static&lt;/code> 生命周期, 这样就杜绝了返回局部变量引用的情况.&lt;/p>
+&lt;p>这样就引入了下一个话题~&lt;/p>
+&lt;h2 id="生命周期">生命周期&lt;/h2>
+&lt;p>以下内容主要参考 &lt;a class="link" href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html" target="_blank" rel="noopener"
+>The Rust Programming Language&lt;/a>&lt;/p>
+&lt;p>生命周期只是一个标签, 语法是&lt;code>'&lt;/code>+字符串/字符. 比如 &lt;code>'a&lt;/code>, &lt;code>'b&lt;/code>. &lt;code>'static&lt;/code> 是一个特殊的生命周期, 表示静态存储, 类似于 &lt;code>Java&lt;/code> 和 &lt;code>C\C++&lt;/code> 中的 &lt;code>static&lt;/code>, 也就是一直存活到程序结束运行才会销毁.&lt;/p>
+&lt;p>生命周期主要是为了避免悬垂引用(野指针), 在 &lt;code>Rust编译器&lt;/code> 中实现了一个借用检查器, 通过比较作用域来确保所有借用的有效性.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> r; &lt;span style="color:#75715e">// ---------+-- &amp;#39;a
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> { &lt;span style="color:#75715e">// |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">let&lt;/span> x &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">5&lt;/span>; &lt;span style="color:#75715e">// -+-- &amp;#39;b |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> r &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>x; &lt;span style="color:#75715e">// | |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> } &lt;span style="color:#75715e">// -+ |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;r: {}&amp;#34;&lt;/span>, r); &lt;span style="color:#75715e">// |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>} &lt;span style="color:#75715e">// ---------+
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这里 &lt;code>r&lt;/code> 的生命周期为 &lt;code>'a&lt;/code>, &lt;code>x&lt;/code> 的生命周期为 &lt;code>'b&lt;/code> , &lt;code>'b&lt;/code> 的范围小于 &lt;code>'a&lt;/code> 的范围, 由于 &lt;code>r&lt;/code> 引用了一个存活范围小于它的变量, 所以会编译失败.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> x &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">5&lt;/span>; &lt;span style="color:#75715e">// ----------+-- &amp;#39;b
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">let&lt;/span> r &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>x; &lt;span style="color:#75715e">// --+-- &amp;#39;a |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;r: {}&amp;#34;&lt;/span>, r); &lt;span style="color:#75715e">// | |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// --+ |
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>} &lt;span style="color:#75715e">// ----------+
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>改为这样子, 因为 &lt;code>r&lt;/code> 的生命周期 &lt;code>'a&lt;/code> 小于 &lt;code>'b&lt;/code> , 这样就能保证在 &lt;code>r&lt;/code> 有效的时候 &lt;code>x&lt;/code> 总是有效的, 这样 &lt;code>r&lt;/code> 就不可能变成一个野指针.&lt;/p>
+&lt;p>考虑这样一个函数:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">longest&lt;/span>(x: &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">str&lt;/span>, y: &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">str&lt;/span>) -&amp;gt; &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">str&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> x.len() &lt;span style="color:#f92672">&amp;gt;&lt;/span> y.len() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> x
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#66d9ef">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> y
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> string1 &lt;span style="color:#f92672">=&lt;/span> String::from(&lt;span style="color:#e6db74">&amp;#34;long string is long&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> string2 &lt;span style="color:#f92672">=&lt;/span> String::from(&lt;span style="color:#e6db74">&amp;#34;xyz&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> result &lt;span style="color:#f92672">=&lt;/span> longest(string1.as_str(), string2.as_str());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;The longest string is {}&amp;#34;&lt;/span>, result);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>乍看之下没有什么问题对吧? 但是编译还是不通过.&lt;/p>
+&lt;blockquote>
+&lt;p>error[E0106]: missing lifetime specifier
 &amp;ndash;&amp;gt; src\main.rs:1:33
 |
 1 | fn longest(x: &amp;amp;str, y: &amp;amp;str) -&amp;gt; &amp;amp;str {
-|               &amp;mdash;-     &amp;mdash;-     ^ expected named lifetime parameter
+| &amp;mdash;- &amp;mdash;- ^ expected named lifetime parameter
 |
-= help: this function&amp;rsquo;s return type contains a borrowed value, but the signature does not say whether it is borrowed from &lt;code&gt;x&lt;/code&gt; or &lt;code&gt;y&lt;/code&gt;
+= help: this function&amp;rsquo;s return type contains a borrowed value, but the signature does not say whether it is borrowed from &lt;code>x&lt;/code> or &lt;code>y&lt;/code>
 help: consider introducing a named lifetime parameter
 |
 1 | fn longest&amp;lt;&amp;lsquo;a&amp;gt;(x: &amp;amp;&amp;lsquo;a str, y: &amp;amp;&amp;lsquo;a str) -&amp;gt; &amp;amp;&amp;lsquo;a str {
-|           ^^^^    ^^^^^^^     ^^^^^^^     ^^^&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;根据报错提示, 我们修改函数签名为&lt;code&gt;fn longest&amp;lt;&#39;a&amp;gt;(x: &amp;amp;&#39;a str, y: &amp;amp;&#39;a str) -&amp;gt; &amp;amp;&#39;a str&lt;/code&gt; 这样这段代码就可以正确运行了. 生命周期在函数签名中的用法类似于泛型, 前面多个单引号而已. 然后在对应的参数上声明所需要的生命周期就可以了.&lt;/p&gt;
-&lt;p&gt;这个函数签名表示告诉调用者 &lt;code&gt;x&lt;/code&gt; , &lt;code&gt;y&lt;/code&gt; , &lt;code&gt;str&lt;/code&gt; 这三个至少能存活的一样久, 否则就不能编译通过.&lt;/p&gt;
-&lt;p&gt;我们修改下 &lt;code&gt;main&lt;/code&gt; 函数为如下:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; string1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; String::from(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;long string is long&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; result;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; string2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; String::from(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xyz&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; longest(string1.as_str(), string2.as_str());
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The longest string is {}&amp;#34;&lt;/span&gt;, result);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们将延长 &lt;code&gt;result&lt;/code&gt; 的生命周期, 并且将 &lt;code&gt;println&lt;/code&gt; 移动到块外面, 这样子编译是不通过的. 来看看编译错误信息:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;error[E0597]: &lt;code&gt;string2&lt;/code&gt; does not live long enough
+| ^^^^ ^^^^^^^ ^^^^^^^ ^^^&lt;/p>
+&lt;/blockquote>
+&lt;p>根据报错提示, 我们修改函数签名为&lt;code>fn longest&amp;lt;'a&amp;gt;(x: &amp;amp;'a str, y: &amp;amp;'a str) -&amp;gt; &amp;amp;'a str&lt;/code> 这样这段代码就可以正确运行了. 生命周期在函数签名中的用法类似于泛型, 前面多个单引号而已. 然后在对应的参数上声明所需要的生命周期就可以了.&lt;/p>
+&lt;p>这个函数签名表示告诉调用者 &lt;code>x&lt;/code> , &lt;code>y&lt;/code> , &lt;code>str&lt;/code> 这三个至少能存活的一样久, 否则就不能编译通过.&lt;/p>
+&lt;p>我们修改下 &lt;code>main&lt;/code> 函数为如下:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> string1 &lt;span style="color:#f92672">=&lt;/span> String::from(&lt;span style="color:#e6db74">&amp;#34;long string is long&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> result;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> string2 &lt;span style="color:#f92672">=&lt;/span> String::from(&lt;span style="color:#e6db74">&amp;#34;xyz&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> result &lt;span style="color:#f92672">=&lt;/span> longest(string1.as_str(), string2.as_str());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;The longest string is {}&amp;#34;&lt;/span>, result);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>我们将延长 &lt;code>result&lt;/code> 的生命周期, 并且将 &lt;code>println&lt;/code> 移动到块外面, 这样子编译是不通过的. 来看看编译错误信息:&lt;/p>
+&lt;blockquote>
+&lt;p>error[E0597]: &lt;code>string2&lt;/code> does not live long enough
 &amp;ndash;&amp;gt; src\main.rs:14:44
 |
-14 |         result = longest(string1.as_str(), string2.as_str());
-|                                            ^^^^^^^ borrowed value does not live long enough
-15 |     }
-|     - &lt;code&gt;string2&lt;/code&gt; dropped here while still borrowed
-16 |     println!(&amp;ldquo;The longest string is {}&amp;rdquo;, result);
-|                                          &amp;mdash;&amp;mdash; borrow later used here&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;提示我们 &lt;code&gt;string2&lt;/code&gt; 在 &lt;code&gt;println&lt;/code&gt; 前就被释放了. 如果像之前那样没有给函数签名加上生命周期的话, 编译器是不能知道函数返回的值到底能存活多久的, 生命周期表明了返回的值与参数的生命周期应该是一致的, 这里所谓的一致是指同样生命周期标签中最小的那个. 在正确的代码中, 三个参数分别对应的 &lt;code&gt;string1&lt;/code&gt;, &lt;code&gt;string2&lt;/code&gt;, &lt;code&gt;result&lt;/code&gt; 中, 最短的那个是 &lt;code&gt;result&lt;/code&gt; , 编译器能推断出在 &lt;code&gt;result&lt;/code&gt; 存活的范围它所引用的值是一直有效的.&lt;/p&gt;
-&lt;p&gt;而在错误的代码中, &lt;code&gt;string2&lt;/code&gt; 是生命周期最短的那个, 所以编译器推断出 &lt;code&gt;result&lt;/code&gt; 只能在 &lt;code&gt;string2&lt;/code&gt; 存活的范围内使用, 一旦超出该范围, 就可以提示调用者需要修改代码.&lt;/p&gt;
-&lt;p&gt;简单说下 &lt;code&gt;Rust&lt;/code&gt; 如何清理内存, 只要让它离开作用域就可以了, 离开作用域的时候会自动调用该类型的 &lt;code&gt;drop&lt;/code&gt; 方法, 而 &lt;code&gt;drop&lt;/code&gt; 一般都是由编译器提供默认实现的, 有时候默认实现不够高效才需要自己去实现. 我们不能调用变量的 &lt;code&gt;drop&lt;/code&gt; 方法, 那样就会有多次释放的问题, 如有需要可以调用标准库提供的 &lt;code&gt;drop&lt;/code&gt; 函数.&lt;/p&gt;
-&lt;p&gt;标准库有提供一个 &lt;code&gt;drop&lt;/code&gt; 函数, 用来手动释放内存, 可以看看它的实现~&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;core::mem
-pub fn drop&lt;!-- raw HTML omitted --&gt;(_x: T)
+14 | result = longest(string1.as_str(), string2.as_str());
+| ^^^^^^^ borrowed value does not live long enough
+15 | }
+| - &lt;code>string2&lt;/code> dropped here while still borrowed
+16 | println!(&amp;ldquo;The longest string is {}&amp;rdquo;, result);
+| &amp;mdash;&amp;mdash; borrow later used here&lt;/p>
+&lt;/blockquote>
+&lt;p>提示我们 &lt;code>string2&lt;/code> 在 &lt;code>println&lt;/code> 前就被释放了. 如果像之前那样没有给函数签名加上生命周期的话, 编译器是不能知道函数返回的值到底能存活多久的, 生命周期表明了返回的值与参数的生命周期应该是一致的, 这里所谓的一致是指同样生命周期标签中最小的那个. 在正确的代码中, 三个参数分别对应的 &lt;code>string1&lt;/code>, &lt;code>string2&lt;/code>, &lt;code>result&lt;/code> 中, 最短的那个是 &lt;code>result&lt;/code> , 编译器能推断出在 &lt;code>result&lt;/code> 存活的范围它所引用的值是一直有效的.&lt;/p>
+&lt;p>而在错误的代码中, &lt;code>string2&lt;/code> 是生命周期最短的那个, 所以编译器推断出 &lt;code>result&lt;/code> 只能在 &lt;code>string2&lt;/code> 存活的范围内使用, 一旦超出该范围, 就可以提示调用者需要修改代码.&lt;/p>
+&lt;p>简单说下 &lt;code>Rust&lt;/code> 如何清理内存, 只要让它离开作用域就可以了, 离开作用域的时候会自动调用该类型的 &lt;code>drop&lt;/code> 方法, 而 &lt;code>drop&lt;/code> 一般都是由编译器提供默认实现的, 有时候默认实现不够高效才需要自己去实现. 我们不能调用变量的 &lt;code>drop&lt;/code> 方法, 那样就会有多次释放的问题, 如有需要可以调用标准库提供的 &lt;code>drop&lt;/code> 函数.&lt;/p>
+&lt;p>标准库有提供一个 &lt;code>drop&lt;/code> 函数, 用来手动释放内存, 可以看看它的实现~&lt;/p>
+&lt;blockquote>
+&lt;p>core::mem
+pub fn drop&lt;!-- raw HTML omitted -->(_x: T)
 Disposes of a value.
 This does so by calling the argument&amp;rsquo;s implementation of Drop.
 This effectively does nothing for types which implement Copy, e.g. integers. Such values are copied and then moved into the function, so the value persists after this function call.
 This function is not magic; it is literally defined as
-pub fn drop&lt;!-- raw HTML omitted --&gt;(_x: T) { }&lt;/p&gt;
-&lt;p&gt;Because _x is moved into the function, it is automatically dropped before the function returns.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;它的实现仅仅是一个空函数块, 将该变量的所有权转移到该函数块中, 在结束的时候调用该变量的 &lt;code&gt;drop&lt;/code&gt; 方法.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;上面似乎都是一些内存安全相关的特性, 感觉只体现出来 &lt;code&gt;Rust&lt;/code&gt; 编译器的强大, 接下来, 可以转下一个话题了, 简单介绍下 &lt;code&gt;Rust&lt;/code&gt; 的一些优雅的语法特性~&lt;/p&gt;
-&lt;h2 id=&#34;trait&#34;&gt;Trait&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;Trait&lt;/code&gt; 类似与 &lt;code&gt;Java&lt;/code&gt; 中的接口概念, 近年来一直以来都有组合大于继承的口号, &lt;code&gt;Trait&lt;/code&gt; 就是在 &lt;code&gt;Rust&lt;/code&gt; 中用来实现组合这一理念的.&lt;/p&gt;
-&lt;p&gt;继承有时候用起来是真的不顺心. 继承吧, 好多用不到的东西, 不继承吧, 又有很多重复工作要做. &lt;code&gt;Rust&lt;/code&gt; 中干脆扔掉了继承.&lt;/p&gt;
-&lt;p&gt;像前面讲到的实现 &lt;code&gt;drop&lt;/code&gt; 方法, 怎么为我们的类型实现 &lt;code&gt;drop&lt;/code&gt; 方法呢?&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Drop&lt;/code&gt; 中只有一个方法, 它的签名为: &lt;code&gt;fn drop(&amp;amp;mut self);&lt;/code&gt; 所以我们就像实现接口一样实现该方法就可以了.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MyVar&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    names: Vec&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;String&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;impl&lt;/span&gt; Drop &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; MyVar {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;drop&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; self) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;self.names;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;MyVar drops&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MyVar {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        names: &lt;span style=&#34;color:#a6e22e&#34;&gt;vec&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;.to_string(), &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;world&amp;#34;&lt;/span&gt;.to_string()]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    };
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;运行后将打印出 &lt;code&gt;MyVar drops&lt;/code&gt; , 可以看出来在离开作用域后就自动调用了我们自定义的 &lt;code&gt;drop&lt;/code&gt; 方法.&lt;/p&gt;
-&lt;p&gt;可以用 &lt;code&gt;Trait&lt;/code&gt; 配合泛型编写一个通用的 &lt;code&gt;largest&lt;/code&gt; 函数.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;largest&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;T: PartialOrd &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; Clone&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;(list: &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;amp;&lt;/span&gt;[T]) -&amp;gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;T&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;mut&lt;/span&gt; largest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;].clone();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; item &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; list.iter() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;item &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; largest {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            largest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; item.clone();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    largest
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; number_list &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; vec![&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;25&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;65&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; largest(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;number_list);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The largest number is {}&amp;#34;&lt;/span&gt;, result);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; char_list &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; vec![&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;m&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;q&amp;#39;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; largest(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;char_list);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The largest char is {}&amp;#34;&lt;/span&gt;, result);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;PartialOrd&lt;/code&gt; 是基于排序为目的而比较一个类型, 实现了该 &lt;code&gt;Trait&lt;/code&gt; 的类型就可以使用 &lt;code&gt;&amp;gt;&lt;/code&gt; ,  &lt;code&gt;&amp;lt;=&lt;/code&gt; , &lt;code&gt;&amp;gt;&lt;/code&gt; , &lt;code&gt;&amp;gt;=&lt;/code&gt; , 可以近似的看作 &lt;code&gt;C++&lt;/code&gt; 中的操作符重载.&lt;/p&gt;
-&lt;p&gt;这里再简单说明一下 &lt;code&gt;Copy&lt;/code&gt; 和 &lt;code&gt;Clone&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Clone&lt;/code&gt; 就是所谓的 &lt;code&gt;深拷贝&lt;/code&gt; , 我们也可以用 &lt;code&gt;Copy&lt;/code&gt; , &lt;code&gt;Copy&lt;/code&gt; 是浅拷贝.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Copy&lt;/code&gt; 是简单的拷贝存储再栈上的位来赋值值, 比较高效, 是一个标记型 &lt;code&gt;Trait&lt;/code&gt; , 该 &lt;code&gt;Trait&lt;/code&gt; 的实现基准是: 如果一个类型内部的类型全部是 &lt;code&gt;Copy&lt;/code&gt; 的, 那么该类型也是 &lt;code&gt;Copy&lt;/code&gt; , 比如所有的基本类型. 而 &lt;code&gt;Clone&lt;/code&gt; 是深拷贝, 我们需要为必要的类型自己实现该 &lt;code&gt;Trait&lt;/code&gt; , 当调用一个 &lt;code&gt;Clone&lt;/code&gt; 的时候我们应该知道该操作可能会比较慢.&lt;/p&gt;
-&lt;p&gt;我们也可以为 &lt;code&gt;Triat&lt;/code&gt; 实现 &lt;code&gt;Trait&lt;/code&gt; , 这用到了 &lt;code&gt;Rust&lt;/code&gt; 中的动态分发, 这里不详细说明, 只做介绍.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;trait&lt;/span&gt; Animal {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;self) -&amp;gt; String;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;trait&lt;/span&gt; Bark {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bark&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;self);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Dog&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;impl&lt;/span&gt; Animal &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; Dog {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;self) -&amp;gt; String {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Kitty&amp;#34;&lt;/span&gt;.to_string()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;impl&lt;/span&gt; Bark &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; Box&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;dyn&lt;/span&gt; Animal&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bark&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;self) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{} bark.&amp;#34;&lt;/span&gt;, self.name());
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; dog: Box&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;dyn&lt;/span&gt; Animal&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Box::new(Dog);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dog.bark();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们可以用 &lt;code&gt;Trait&lt;/code&gt; 来组合成我们最终所需要的类型, 每个 &lt;code&gt;Trait&lt;/code&gt; 都是那么的小巧简洁~ 不像是继承, 继承有着严重的耦合, 并且显得不是那么精巧.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;之前我们有提到过 &lt;code&gt;Rust&lt;/code&gt; 中是没有空指针的, 那么我们如何表示一个可能存在的值呢?&lt;/p&gt;
-&lt;p&gt;如果有人用过 &lt;code&gt;JDK8&lt;/code&gt; 中的 &lt;code&gt;Optional&lt;/code&gt; 的话, 那应该就很熟悉了~答案就是 &lt;code&gt;Option&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Optional&lt;/code&gt; 在 &lt;code&gt;Java&lt;/code&gt; 中出现的太晚了, 很多人对这个特性是不怎么了解的, 迁移起来也很麻烦, 普遍还是使用空指针和捕获空指针异常来处理.&lt;/p&gt;
-&lt;p&gt;而在 &lt;code&gt;Rust&lt;/code&gt; 中 &lt;code&gt;Option&lt;/code&gt; 遍布了各个角落, &lt;code&gt;Option&lt;/code&gt; 只是一个简单的枚举, 所以我们直接说明下 &lt;code&gt;Rust&lt;/code&gt; 中使用枚举处理空指针和异常错误的方法.&lt;/p&gt;
-&lt;h2 id=&#34;枚举&#34;&gt;枚举&lt;/h2&gt;
-&lt;h3 id=&#34;option&#34;&gt;Option&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;Option&lt;/code&gt; 只是一个简单的枚举类型, 但是在 &lt;code&gt;Rust&lt;/code&gt; 中枚举是很强大的.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Option&lt;/code&gt; 的签名是&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;enum&lt;/span&gt; Option&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;T&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    None,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Some(T),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;它是这么使用的:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Option::Some(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;match&lt;/span&gt; x {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Some(x) &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Val is: {}&amp;#34;&lt;/span&gt;, x),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        None &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;No val&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    };
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在 &lt;code&gt;Rust&lt;/code&gt; 中对于枚举的所有类型都强制遍历处理, 当然也可以用 &lt;code&gt;_&lt;/code&gt; 来忽略掉不需要的部分, 所有我们不确定是否有值的地方都需要用 &lt;code&gt;Option&lt;/code&gt; 来表示.&lt;/p&gt;
-&lt;h3 id=&#34;result&#34;&gt;Result&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;Rust&lt;/code&gt; 中也是用枚举来处理异常错误.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;use&lt;/span&gt; std::net::TcpStream;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; tcp_stream &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; TcpStream::connect(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1:8000&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;match&lt;/span&gt; tcp_stream {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Ok(_) &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;success&amp;#34;&lt;/span&gt;),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Err(e) &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, e),
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    };
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不需要捕获异常, 要知道 &lt;code&gt;Java&lt;/code&gt; 中捕获异常是很耗费性能的, 使用枚举来处理空指针和异常错误是不是很优雅~&lt;/p&gt;
-&lt;p&gt;除了使用模式匹配外, 我们还可以使用 &lt;code&gt;if let&lt;/code&gt; , 如下:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;use&lt;/span&gt; std::net::TcpStream;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; tcp_stream &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; TcpStream::connect(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1:8000&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; Ok(_) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; tcp_stream {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;success&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println!(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;error&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同样类似的还有 &lt;code&gt;while let&lt;/code&gt; .&lt;/p&gt;
-&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
-&lt;p&gt;上述差不多说明了一些为什么我选择学 &lt;code&gt;Rust&lt;/code&gt; 的理由, 当然还有很多其它的, 我所述并不足以解释 &lt;code&gt;Rust&lt;/code&gt; 在最受程序员欢迎的语言调查中占据榜一.&lt;/p&gt;
-&lt;p&gt;我在写 &lt;code&gt;C&lt;/code&gt; 代码的时候, 总会纠结该不该释放内存, 有没有野指针的可能. 也烦恼与标准库不够好用, 各平台头文件不够统一, 没法编写多平台通用的代码.&lt;/p&gt;
-&lt;p&gt;同样的, 在写 &lt;code&gt;Java&lt;/code&gt; 的时候又会感觉有些啰嗦, 很多写法不够简洁.&lt;/p&gt;
-&lt;p&gt;而 &lt;code&gt;Rust&lt;/code&gt; 的话, 标准库足够好用, 是否内存安全有编译器提醒, 而且写起来有很多语法糖比 &lt;code&gt;Java&lt;/code&gt; 要小巧很多, 也只有很小的运行时, 没有垃圾回收, 可以直接打包成二进制文件运行. 性能与 &lt;code&gt;C&lt;/code&gt; 是差不多的.&lt;/p&gt;
-&lt;p&gt;不过说来我学 &lt;code&gt;Rust&lt;/code&gt; 还有一个原因是因为它够难, 而且没什么历史包袱, 比较有挑战. &lt;code&gt;C++&lt;/code&gt; 的历史包袱换个词也可以说是经验积累, 不过我个人觉得有些太过厚重, 有些难啃吧.&lt;/p&gt;
-&lt;p&gt;本文浅尝辄止, 简单说明了一些 &lt;code&gt;Rust&lt;/code&gt; 的特性. 这些特性差不多都是众多程序员在编写 &lt;code&gt;C/C++&lt;/code&gt; 程序中总结出来的类似于最佳实践之类的东西. 所以本文也大量对比了 &lt;code&gt;Rust&lt;/code&gt; 和 &lt;code&gt;C&lt;/code&gt; , 并且学习 &lt;code&gt;Rust&lt;/code&gt; 也是离不开 &lt;code&gt;C&lt;/code&gt; 的, 其中存在了 &lt;code&gt;unsafe&lt;/code&gt; 这样的东西. 不了解 &lt;code&gt;C&lt;/code&gt; 的话是没法写 &lt;code&gt;unsafe&lt;/code&gt; 部分的, 当然这部分大部分程序员也不怎么会接触到.&lt;/p&gt;
-&lt;p&gt;同时 &lt;code&gt;Rust&lt;/code&gt; 作为系统级语言, 与 &lt;code&gt;C&lt;/code&gt; 也有着非常友好的交互性, 很容易使用的 &lt;code&gt;FFI&lt;/code&gt; , 不管是为了从 &lt;code&gt;C&lt;/code&gt; 逐步切换到 &lt;code&gt;Rust&lt;/code&gt; , 还是为了牺牲点安全提高灵活性的目的而使用 &lt;code&gt;FFI&lt;/code&gt; , 这都算是一个亮点了. 毕竟 &lt;code&gt;C&lt;/code&gt; 在各个领域都算是不可或缺的基本编程语言了.&lt;/p&gt;
-</description>
-        </item>
-        
-    </channel>
-</rss>
+pub fn drop&lt;!-- raw HTML omitted -->(_x: T) { }&lt;/p>
+&lt;p>Because _x is moved into the function, it is automatically dropped before the function returns.&lt;/p>
+&lt;/blockquote>
+&lt;p>它的实现仅仅是一个空函数块, 将该变量的所有权转移到该函数块中, 在结束的时候调用该变量的 &lt;code>drop&lt;/code> 方法.&lt;/p>
+&lt;hr>
+&lt;p>上面似乎都是一些内存安全相关的特性, 感觉只体现出来 &lt;code>Rust&lt;/code> 编译器的强大, 接下来, 可以转下一个话题了, 简单介绍下 &lt;code>Rust&lt;/code> 的一些优雅的语法特性~&lt;/p>
+&lt;h2 id="trait">Trait&lt;/h2>
+&lt;p>&lt;code>Trait&lt;/code> 类似与 &lt;code>Java&lt;/code> 中的接口概念, 近年来一直以来都有组合大于继承的口号, &lt;code>Trait&lt;/code> 就是在 &lt;code>Rust&lt;/code> 中用来实现组合这一理念的.&lt;/p>
+&lt;p>继承有时候用起来是真的不顺心. 继承吧, 好多用不到的东西, 不继承吧, 又有很多重复工作要做. &lt;code>Rust&lt;/code> 中干脆扔掉了继承.&lt;/p>
+&lt;p>像前面讲到的实现 &lt;code>drop&lt;/code> 方法, 怎么为我们的类型实现 &lt;code>drop&lt;/code> 方法呢?&lt;/p>
+&lt;p>&lt;code>Drop&lt;/code> 中只有一个方法, 它的签名为: &lt;code>fn drop(&amp;amp;mut self);&lt;/code> 所以我们就像实现接口一样实现该方法就可以了.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">struct&lt;/span> &lt;span style="color:#a6e22e">MyVar&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> names: Vec&lt;span style="color:#f92672">&amp;lt;&lt;/span>String&lt;span style="color:#f92672">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">impl&lt;/span> Drop &lt;span style="color:#66d9ef">for&lt;/span> MyVar {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">drop&lt;/span>(&lt;span style="color:#f92672">&amp;amp;&lt;/span>&lt;span style="color:#66d9ef">mut&lt;/span> self) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">&amp;amp;&lt;/span>self.names;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;MyVar drops&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> _ &lt;span style="color:#f92672">=&lt;/span> MyVar {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> names: &lt;span style="color:#a6e22e">vec&lt;/span>&lt;span style="color:#f92672">!&lt;/span>[&lt;span style="color:#e6db74">&amp;#34;hello&amp;#34;&lt;/span>.to_string(), &lt;span style="color:#e6db74">&amp;#34;world&amp;#34;&lt;/span>.to_string()]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>运行后将打印出 &lt;code>MyVar drops&lt;/code> , 可以看出来在离开作用域后就自动调用了我们自定义的 &lt;code>drop&lt;/code> 方法.&lt;/p>
+&lt;p>可以用 &lt;code>Trait&lt;/code> 配合泛型编写一个通用的 &lt;code>largest&lt;/code> 函数.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">largest&lt;/span>&lt;span style="color:#f92672">&amp;lt;&lt;/span>T: PartialOrd &lt;span style="color:#f92672">+&lt;/span> Clone&lt;span style="color:#f92672">&amp;gt;&lt;/span>(list: &lt;span style="color:#66d9ef">&amp;amp;&lt;/span>[T]) -&amp;gt; &lt;span style="color:#a6e22e">T&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> &lt;span style="color:#66d9ef">mut&lt;/span> largest &lt;span style="color:#f92672">=&lt;/span> list[&lt;span style="color:#ae81ff">0&lt;/span>].clone();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">for&lt;/span> item &lt;span style="color:#66d9ef">in&lt;/span> list.iter() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#f92672">*&lt;/span>item &lt;span style="color:#f92672">&amp;gt;&lt;/span> largest {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> largest &lt;span style="color:#f92672">=&lt;/span> item.clone();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> largest
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> number_list &lt;span style="color:#f92672">=&lt;/span> vec![&lt;span style="color:#ae81ff">34&lt;/span>, &lt;span style="color:#ae81ff">50&lt;/span>, &lt;span style="color:#ae81ff">25&lt;/span>, &lt;span style="color:#ae81ff">100&lt;/span>, &lt;span style="color:#ae81ff">65&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> result &lt;span style="color:#f92672">=&lt;/span> largest(&lt;span style="color:#f92672">&amp;amp;&lt;/span>number_list);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;The largest number is {}&amp;#34;&lt;/span>, result);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> char_list &lt;span style="color:#f92672">=&lt;/span> vec![&lt;span style="color:#e6db74">&amp;#39;y&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;m&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;a&amp;#39;&lt;/span>, &lt;span style="color:#e6db74">&amp;#39;q&amp;#39;&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> result &lt;span style="color:#f92672">=&lt;/span> largest(&lt;span style="color:#f92672">&amp;amp;&lt;/span>char_list);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;The largest char is {}&amp;#34;&lt;/span>, result);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>PartialOrd&lt;/code> 是基于排序为目的而比较一个类型, 实现了该 &lt;code>Trait&lt;/code> 的类型就可以使用 &lt;code>&amp;gt;&lt;/code> , &lt;code>&amp;lt;=&lt;/code> , &lt;code>&amp;gt;&lt;/code> , &lt;code>&amp;gt;=&lt;/code> , 可以近似的看作 &lt;code>C++&lt;/code> 中的操作符重载.&lt;/p>
+&lt;p>这里再简单说明一下 &lt;code>Copy&lt;/code> 和 &lt;code>Clone&lt;/code>.&lt;/p>
+&lt;p>&lt;code>Clone&lt;/code> 就是所谓的 &lt;code>深拷贝&lt;/code> , 我们也可以用 &lt;code>Copy&lt;/code> , &lt;code>Copy&lt;/code> 是浅拷贝.&lt;/p>
+&lt;p>&lt;code>Copy&lt;/code> 是简单的拷贝存储再栈上的位来赋值值, 比较高效, 是一个标记型 &lt;code>Trait&lt;/code> , 该 &lt;code>Trait&lt;/code> 的实现基准是: 如果一个类型内部的类型全部是 &lt;code>Copy&lt;/code> 的, 那么该类型也是 &lt;code>Copy&lt;/code> , 比如所有的基本类型. 而 &lt;code>Clone&lt;/code> 是深拷贝, 我们需要为必要的类型自己实现该 &lt;code>Trait&lt;/code> , 当调用一个 &lt;code>Clone&lt;/code> 的时候我们应该知道该操作可能会比较慢.&lt;/p>
+&lt;p>我们也可以为 &lt;code>Triat&lt;/code> 实现 &lt;code>Trait&lt;/code> , 这用到了 &lt;code>Rust&lt;/code> 中的动态分发, 这里不详细说明, 只做介绍.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">trait&lt;/span> Animal {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">name&lt;/span>(&lt;span style="color:#f92672">&amp;amp;&lt;/span>self) -&amp;gt; String;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">trait&lt;/span> Bark {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">bark&lt;/span>(&lt;span style="color:#f92672">&amp;amp;&lt;/span>self);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">struct&lt;/span> &lt;span style="color:#a6e22e">Dog&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">impl&lt;/span> Animal &lt;span style="color:#66d9ef">for&lt;/span> Dog {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">name&lt;/span>(&lt;span style="color:#f92672">&amp;amp;&lt;/span>self) -&amp;gt; String {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;Kitty&amp;#34;&lt;/span>.to_string()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">impl&lt;/span> Bark &lt;span style="color:#66d9ef">for&lt;/span> Box&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#66d9ef">dyn&lt;/span> Animal&lt;span style="color:#f92672">&amp;gt;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">bark&lt;/span>(&lt;span style="color:#f92672">&amp;amp;&lt;/span>self) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;{} bark.&amp;#34;&lt;/span>, self.name());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> dog: Box&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#66d9ef">dyn&lt;/span> Animal&lt;span style="color:#f92672">&amp;gt;&lt;/span> &lt;span style="color:#f92672">=&lt;/span> Box::new(Dog);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> dog.bark();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>我们可以用 &lt;code>Trait&lt;/code> 来组合成我们最终所需要的类型, 每个 &lt;code>Trait&lt;/code> 都是那么的小巧简洁~ 不像是继承, 继承有着严重的耦合, 并且显得不是那么精巧.&lt;/p>
+&lt;hr>
+&lt;p>之前我们有提到过 &lt;code>Rust&lt;/code> 中是没有空指针的, 那么我们如何表示一个可能存在的值呢?&lt;/p>
+&lt;p>如果有人用过 &lt;code>JDK8&lt;/code> 中的 &lt;code>Optional&lt;/code> 的话, 那应该就很熟悉了~答案就是 &lt;code>Option&lt;/code>.&lt;/p>
+&lt;p>&lt;code>Optional&lt;/code> 在 &lt;code>Java&lt;/code> 中出现的太晚了, 很多人对这个特性是不怎么了解的, 迁移起来也很麻烦, 普遍还是使用空指针和捕获空指针异常来处理.&lt;/p>
+&lt;p>而在 &lt;code>Rust&lt;/code> 中 &lt;code>Option&lt;/code> 遍布了各个角落, &lt;code>Option&lt;/code> 只是一个简单的枚举, 所以我们直接说明下 &lt;code>Rust&lt;/code> 中使用枚举处理空指针和异常错误的方法.&lt;/p>
+&lt;h2 id="枚举">枚举&lt;/h2>
+&lt;h3 id="option">Option&lt;/h3>
+&lt;p>&lt;code>Option&lt;/code> 只是一个简单的枚举类型, 但是在 &lt;code>Rust&lt;/code> 中枚举是很强大的.&lt;/p>
+&lt;p>&lt;code>Option&lt;/code> 的签名是&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">pub&lt;/span> &lt;span style="color:#66d9ef">enum&lt;/span> Option&lt;span style="color:#f92672">&amp;lt;&lt;/span>T&lt;span style="color:#f92672">&amp;gt;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> None,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Some(T),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>它是这么使用的:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> x &lt;span style="color:#f92672">=&lt;/span> Option::Some(&lt;span style="color:#ae81ff">1&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">match&lt;/span> x {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Some(x) &lt;span style="color:#f92672">=&amp;gt;&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;Val is: {}&amp;#34;&lt;/span>, x),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> None &lt;span style="color:#f92672">=&amp;gt;&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;No val&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在 &lt;code>Rust&lt;/code> 中对于枚举的所有类型都强制遍历处理, 当然也可以用 &lt;code>_&lt;/code> 来忽略掉不需要的部分, 所有我们不确定是否有值的地方都需要用 &lt;code>Option&lt;/code> 来表示.&lt;/p>
+&lt;h3 id="result">Result&lt;/h3>
+&lt;p>&lt;code>Rust&lt;/code> 中也是用枚举来处理异常错误.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">use&lt;/span> std::net::TcpStream;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> tcp_stream &lt;span style="color:#f92672">=&lt;/span> TcpStream::connect(&lt;span style="color:#e6db74">&amp;#34;127.0.0.1:8000&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">match&lt;/span> tcp_stream {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Ok(_) &lt;span style="color:#f92672">=&amp;gt;&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;success&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Err(e) &lt;span style="color:#f92672">=&amp;gt;&lt;/span> println!(&lt;span style="color:#e6db74">&amp;#34;{}&amp;#34;&lt;/span>, e),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>不需要捕获异常, 要知道 &lt;code>Java&lt;/code> 中捕获异常是很耗费性能的, 使用枚举来处理空指针和异常错误是不是很优雅~&lt;/p>
+&lt;p>除了使用模式匹配外, 我们还可以使用 &lt;code>if let&lt;/code> , 如下:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">use&lt;/span> std::net::TcpStream;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">fn&lt;/span> &lt;span style="color:#a6e22e">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">let&lt;/span> tcp_stream &lt;span style="color:#f92672">=&lt;/span> TcpStream::connect(&lt;span style="color:#e6db74">&amp;#34;127.0.0.1:8000&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#66d9ef">let&lt;/span> Ok(_) &lt;span style="color:#f92672">=&lt;/span> tcp_stream {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;success&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#66d9ef">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#e6db74">&amp;#34;error&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>同样类似的还有 &lt;code>while let&lt;/code> .&lt;/p>
+&lt;h2 id="summary">Summary&lt;/h2>
+&lt;p>上述差不多说明了一些为什么我选择学 &lt;code>Rust&lt;/code> 的理由, 当然还有很多其它的, 我所述并不足以解释 &lt;code>Rust&lt;/code> 在最受程序员欢迎的语言调查中占据榜一.&lt;/p>
+&lt;p>我在写 &lt;code>C&lt;/code> 代码的时候, 总会纠结该不该释放内存, 有没有野指针的可能. 也烦恼与标准库不够好用, 各平台头文件不够统一, 没法编写多平台通用的代码.&lt;/p>
+&lt;p>同样的, 在写 &lt;code>Java&lt;/code> 的时候又会感觉有些啰嗦, 很多写法不够简洁.&lt;/p>
+&lt;p>而 &lt;code>Rust&lt;/code> 的话, 标准库足够好用, 是否内存安全有编译器提醒, 而且写起来有很多语法糖比 &lt;code>Java&lt;/code> 要小巧很多, 也只有很小的运行时, 没有垃圾回收, 可以直接打包成二进制文件运行. 性能与 &lt;code>C&lt;/code> 是差不多的.&lt;/p>
+&lt;p>不过说来我学 &lt;code>Rust&lt;/code> 还有一个原因是因为它够难, 而且没什么历史包袱, 比较有挑战. &lt;code>C++&lt;/code> 的历史包袱换个词也可以说是经验积累, 不过我个人觉得有些太过厚重, 有些难啃吧.&lt;/p>
+&lt;p>本文浅尝辄止, 简单说明了一些 &lt;code>Rust&lt;/code> 的特性. 这些特性差不多都是众多程序员在编写 &lt;code>C/C++&lt;/code> 程序中总结出来的类似于最佳实践之类的东西. 所以本文也大量对比了 &lt;code>Rust&lt;/code> 和 &lt;code>C&lt;/code> , 并且学习 &lt;code>Rust&lt;/code> 也是离不开 &lt;code>C&lt;/code> 的, 其中存在了 &lt;code>unsafe&lt;/code> 这样的东西. 不了解 &lt;code>C&lt;/code> 的话是没法写 &lt;code>unsafe&lt;/code> 部分的, 当然这部分大部分程序员也不怎么会接触到.&lt;/p>
+&lt;p>同时 &lt;code>Rust&lt;/code> 作为系统级语言, 与 &lt;code>C&lt;/code> 也有着非常友好的交互性, 很容易使用的 &lt;code>FFI&lt;/code> , 不管是为了从 &lt;code>C&lt;/code> 逐步切换到 &lt;code>Rust&lt;/code> , 还是为了牺牲点安全提高灵活性的目的而使用 &lt;code>FFI&lt;/code> , 这都算是一个亮点了. 毕竟 &lt;code>C&lt;/code> 在各个领域都算是不可或缺的基本编程语言了.&lt;/p></description></item></channel></rss>

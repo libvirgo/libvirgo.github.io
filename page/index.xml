@@ -1,67 +1,33 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>Pages on </title>
-        <link>/page/</link>
-        <description>Recent content in Pages on </description>
-        <generator>Hugo -- gohugo.io</generator>
-        <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="/page/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Archives</title>
-        <link>/page/archives/</link>
-        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-        
-        <guid>/page/archives/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>About</title>
-        <link>/page/about/</link>
-        <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
-        
-        <guid>/page/about/</guid>
-        <description>&lt;p&gt;大学荒废摸鱼了四年, 乱七八糟什么都学了点&amp;hellip;&lt;/p&gt;
-&lt;p&gt;大一学了点 &lt;code&gt;Python&lt;/code&gt;, 大二学了点前端, 大三大四为了找工作学了后端&amp;hellip;&lt;/p&gt;
-&lt;p&gt;结果工作调岗到项目经理&amp;hellip;&lt;/p&gt;
-&lt;p&gt;不过对子自己杂七杂八的所学也不是很讨厌, 什么都多多少少懂一些&amp;hellip;现在一段时间在学习 &lt;code&gt;Rust&lt;/code&gt;, 很大的原因是 &lt;code&gt;Rust&lt;/code&gt; 比较难吧, 但是又没有 &lt;code&gt;C++&lt;/code&gt; 那么厚重的包袱.&lt;/p&gt;
-&lt;p&gt;之前使用的是 &lt;code&gt;Hexo&lt;/code&gt;, 不过对图片管理的方式不是很喜欢, 所以改用了 &lt;code&gt;Hugo&lt;/code&gt;, 对该主题的作者很是佩服, 大二学妹就能设计实现这么好看的前端了~而我在学了前端后对繁琐的布局产生了生理性厌恶, 总是提不起兴趣&amp;hellip;后续提起兴趣的时候希望能自己写个博客前端出来, 或是用 &lt;code&gt;Angular&lt;/code&gt; 或是用 &lt;code&gt;React&lt;/code&gt; 又或者是 &lt;code&gt;Vue&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;总是在浅尝辄止, 目前学习最深的可能反而是 &lt;code&gt;Git&lt;/code&gt;, 不得不说 &lt;code&gt;Git权威指南&lt;/code&gt; 虽然写得很厚, 但是内容上还是没什么问题的.&lt;/p&gt;
-&lt;p&gt;目前能够拿出来看看的技能.&lt;/p&gt;
-&lt;p&gt;PS: Sort&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;双拼&lt;/li&gt;
-&lt;li&gt;Git&lt;/li&gt;
-&lt;li&gt;C&lt;/li&gt;
-&lt;li&gt;Java&lt;/li&gt;
-&lt;li&gt;Rust&lt;/li&gt;
-&lt;li&gt;JavaScript&lt;/li&gt;
-&lt;li&gt;Python&lt;/li&gt;
-&lt;li&gt;Vim&lt;/li&gt;
-&lt;li&gt;Emacs&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;学了但是拿不出来的技能:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;CSS&lt;/li&gt;
-&lt;li&gt;C++&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;不过说到底语言不过是工具罢了&amp;hellip;学的还是围绕语言搭建的生态吧, Java的生态学会的最多吧, 比如说 &lt;code&gt;Spring&lt;/code&gt;, 毕竟当初想拿来吃饭的东西. 其次就是 &lt;code&gt;JavaScript&lt;/code&gt; 的生态三大框架, 还有 &lt;code&gt;Node&lt;/code&gt; 以及异步等等&amp;hellip;&lt;/p&gt;
-&lt;p&gt;现在想学 &lt;code&gt;Rust&lt;/code&gt; 写个简单的操作系统, 面向硬件编程试试. 毕竟一直以来都是在调用 &lt;code&gt;API&lt;/code&gt;, 或许能做些好玩的事情出来&amp;hellip;&lt;/p&gt;
-&lt;p&gt;高中大学都没能做出什么成果出来. 还是希望能做出些好玩的东西~&lt;/p&gt;
-&lt;p&gt;如果对 &lt;code&gt;Rust&lt;/code&gt; 有兴趣的或者有可以指教我的东西, 可以mail或者QQ一起探讨~&lt;/p&gt;
-&lt;p&gt;如果觉得文章对你有帮助的话, 可以点个小星星~或者请我喝杯可乐我也不会拒绝的~&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;peeking_inside_a_rust_enum&lt;/code&gt; 这篇文章真的翻了好久了&amp;hellip;&lt;/p&gt;
-&lt;p&gt;自从度过试用期开始带项目加班后就没怎么看过了&amp;hellip;&lt;/p&gt;
-&lt;p&gt;希望不要烂尾了&amp;hellip;慢慢看吧.&lt;/p&gt;
-&lt;p&gt;以上&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>Search</title>
-        <link>/page/search/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>/page/search/</guid>
-        <description></description>
-        </item>
-        
-    </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on</title><link>/page/</link><description>Recent content in Pages on</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="/page/index.xml" rel="self" type="application/rss+xml"/><item><title>Archives</title><link>/page/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>/page/archives/</guid><description/></item><item><title>About</title><link>/page/about/</link><pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate><guid>/page/about/</guid><description>&lt;p>大学荒废摸鱼了四年, 乱七八糟什么都学了点&amp;hellip;&lt;/p>
+&lt;p>大一学了点 &lt;code>Python&lt;/code>, 大二学了点前端, 大三大四为了找工作学了后端&amp;hellip;&lt;/p>
+&lt;p>结果工作调岗到项目经理&amp;hellip;&lt;/p>
+&lt;p>不过对子自己杂七杂八的所学也不是很讨厌, 什么都多多少少懂一些&amp;hellip;现在一段时间在学习 &lt;code>Rust&lt;/code>, 很大的原因是 &lt;code>Rust&lt;/code> 比较难吧, 但是又没有 &lt;code>C++&lt;/code> 那么厚重的包袱.&lt;/p>
+&lt;p>之前使用的是 &lt;code>Hexo&lt;/code>, 不过对图片管理的方式不是很喜欢, 所以改用了 &lt;code>Hugo&lt;/code>, 对该主题的作者很是佩服, 大二学妹就能设计实现这么好看的前端了~而我在学了前端后对繁琐的布局产生了生理性厌恶, 总是提不起兴趣&amp;hellip;后续提起兴趣的时候希望能自己写个博客前端出来, 或是用 &lt;code>Angular&lt;/code> 或是用 &lt;code>React&lt;/code> 又或者是 &lt;code>Vue&lt;/code>.&lt;/p>
+&lt;p>总是在浅尝辄止, 目前学习最深的可能反而是 &lt;code>Git&lt;/code>, 不得不说 &lt;code>Git权威指南&lt;/code> 虽然写得很厚, 但是内容上还是没什么问题的.&lt;/p>
+&lt;p>目前能够拿出来看看的技能.&lt;/p>
+&lt;p>PS: Sort&lt;/p>
+&lt;ul>
+&lt;li>双拼&lt;/li>
+&lt;li>Git&lt;/li>
+&lt;li>C&lt;/li>
+&lt;li>Java&lt;/li>
+&lt;li>Rust&lt;/li>
+&lt;li>JavaScript&lt;/li>
+&lt;li>Python&lt;/li>
+&lt;li>Vim&lt;/li>
+&lt;li>Emacs&lt;/li>
+&lt;/ul>
+&lt;p>学了但是拿不出来的技能:&lt;/p>
+&lt;ul>
+&lt;li>CSS&lt;/li>
+&lt;li>C++&lt;/li>
+&lt;/ul>
+&lt;p>不过说到底语言不过是工具罢了&amp;hellip;学的还是围绕语言搭建的生态吧, Java的生态学会的最多吧, 比如说 &lt;code>Spring&lt;/code>, 毕竟当初想拿来吃饭的东西. 其次就是 &lt;code>JavaScript&lt;/code> 的生态三大框架, 还有 &lt;code>Node&lt;/code> 以及异步等等&amp;hellip;&lt;/p>
+&lt;p>现在想学 &lt;code>Rust&lt;/code> 写个简单的操作系统, 面向硬件编程试试. 毕竟一直以来都是在调用 &lt;code>API&lt;/code>, 或许能做些好玩的事情出来&amp;hellip;&lt;/p>
+&lt;p>高中大学都没能做出什么成果出来. 还是希望能做出些好玩的东西~&lt;/p>
+&lt;p>如果对 &lt;code>Rust&lt;/code> 有兴趣的或者有可以指教我的东西, 可以mail或者QQ一起探讨~&lt;/p>
+&lt;p>如果觉得文章对你有帮助的话, 可以点个小星星~或者请我喝杯可乐我也不会拒绝的~&lt;/p>
+&lt;p>&lt;code>peeking_inside_a_rust_enum&lt;/code> 这篇文章真的翻了好久了&amp;hellip;&lt;/p>
+&lt;p>自从度过试用期开始带项目加班后就没怎么看过了&amp;hellip;&lt;/p>
+&lt;p>希望不要烂尾了&amp;hellip;慢慢看吧.&lt;/p>
+&lt;p>以上&lt;/p></description></item><item><title>Search</title><link>/page/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/page/search/</guid><description/></item></channel></rss>
