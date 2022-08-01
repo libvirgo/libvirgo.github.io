@@ -4,7 +4,7 @@ module:
   imports:
     - path: github.com/CaiJimmy/hugo-theme-stack/v3
       disable: false
-
+title: Rabbit hole
 params:
   favicon: /favicon.ico
   sidebar:
