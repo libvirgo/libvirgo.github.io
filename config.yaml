@@ -9,8 +9,21 @@ params:
   favicon: /favicon.ico
   sidebar:
     emoji: 🍥
-    subtitle: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    subtitle: Tech is and always will be political.
     avatar:
       enabled: true
       local: true
       src: img/avatar.png
+  widgets:
+    page:
+      - type: toc
+markup:
+  tableOfContents:
+    endLevel: 4
+    ordered: true
+    startLevel: 1
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true

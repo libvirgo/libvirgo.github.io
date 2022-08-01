@@ -86,7 +86,7 @@ Here we go! 首先, 我们将直接干预控制 `CPU`. 这并不是特别好移�
 
 在这个架构中 `CPU` 的特点是有一组16个寄存器.
 
-![register_usage](./register_usage.png)
+![register_usage](register_usage.png)
 
 如果你对图片的其余部分有兴趣的话你可以在 [这里](https://github.com/hjl-tools/x86-psABI/wiki/X86-psABI) 找到它.
 
@@ -353,7 +353,7 @@ ok, 所以发生了什么? 我们在任何地方都没有调用 `hello` 函数�
 
 ## 一个栈看起来长什么样子
 
-![simplified_view_of_a_stack](./simplified_view_of_a_stack.png)
+![simplified_view_of_a_stack](simplified_view_of_a_stack.png)
 
 让我们从一个简化的栈视图开始. 一个64位 `CPU` 每次读取8个字节, 尽管我们普通看到的栈是一长行的 `u8`, 但我们传递指针的时候需要确保我们传递的是 `0016`, `0008` 或者 `0000`.
 
@@ -461,7 +461,7 @@ OK, 现在我们已经学习了栈长什么样子, 是如何工作的, 我们已
 
 **psABI 栈布局长这样:**
 
-![Stack Frame with Base Pointer](./bilde.png)
+![Stack Frame with Base Pointer](bilde.png)
 
 如你所看到的 `%rsp` 是我们的栈指针. 我们需要把栈指针放在从基地址开始16的倍数的地方. 返回的地址位于相邻的8个字节中, 其上还有一个存储内存参数的房间. 当我们想要做更复杂的事情的时候我们必须牢记这点.
 
