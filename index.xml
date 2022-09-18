@@ -3371,8 +3371,7 @@ pub fn drop&lt;T>(_x: T) { }&lt;/p>
 &lt;p>不过说到底语言不过是工具罢了&amp;hellip;学的还是围绕语言搭建的生态吧, Java的生态学会的最多吧, 比如说 &lt;code>Spring&lt;/code>, 毕竟当初想拿来吃饭的东西. 其次就是 &lt;code>JavaScript&lt;/code> 的生态三大框架, 还有 &lt;code>Node&lt;/code> 以及异步等等&amp;hellip;&lt;/p>
 &lt;p>现在想学 &lt;code>Rust&lt;/code> 写个简单的操作系统, 面向硬件编程试试. 毕竟一直以来都是在调用 &lt;code>API&lt;/code>, 或许能做些好玩的事情出来&amp;hellip;&lt;/p>
 &lt;p>高中大学都没能做出什么成果出来. 还是希望能做出些好玩的东西~&lt;/p>
-&lt;p>如果对 &lt;code>Rust&lt;/code> 有兴趣的或者有可以指教我的东西, 可以mail或者QQ一起探讨~&lt;/p>
-&lt;p>如果觉得文章对你有帮助的话, 可以点个小星星~或者请我喝杯可乐我也不会拒绝的~&lt;/p>
+&lt;p>如果想在生活中找可以讨论编码的伙伴, 可以mail或者QQ一起探讨~&lt;/p>
 &lt;p>&lt;code>peeking_inside_a_rust_enum&lt;/code> 这篇文章真的翻了好久了&amp;hellip;&lt;/p>
 &lt;p>自从度过试用期开始带项目加班后就没怎么看过了&amp;hellip;&lt;/p>
 &lt;p>希望不要烂尾了&amp;hellip;慢慢看吧.&lt;/p>
