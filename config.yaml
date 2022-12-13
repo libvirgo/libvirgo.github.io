@@ -17,6 +17,24 @@ params:
   widgets:
     page:
       - type: toc
+
+menu:
+    main:
+        - identifier: home
+          name: Home
+          url: /
+          weight: -100
+          params:
+            icon: home
+            newTab: false
+
+    social:
+        - identifier: github
+          name: GitHub
+          url: https://github.com/libvirgo/
+          params:
+              icon: brand-github
+
 markup:
   tableOfContents:
     endLevel: 4

@@ -1,5 +1,5 @@
 ---
-title: 在Fedora36上部署k8s
+title: Deploy kubernetes in Fedora 36
 date: 2022-08-02T01:16:00+08:00
 slug: deploy_k8s_in_fedora
 categories:

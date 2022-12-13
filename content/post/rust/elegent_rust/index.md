@@ -4,7 +4,7 @@ date: 2020-09-15T15:30:44+08:00
 slug: elegent_rust
 image: cover.png
 categories:
-    - Rust
+    - rust
 tags:
     - Basic
     - Rust

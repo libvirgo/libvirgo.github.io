@@ -1,8 +1,8 @@
 ---
-title: 逆变与协变
+title: Covariance and Contravariance
 date: 2021-05-01T00:50:44+08:00
 slug: covariance_and_contravariance
-categories:
+categories: programing_language
 tags:
     - Concept
     - Note

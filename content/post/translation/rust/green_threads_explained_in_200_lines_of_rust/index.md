@@ -5,7 +5,7 @@ lastmod: 2020-11-30T11:00:00+08:00
 slug: green_threads_explained_in_200_lines_of_rust
 image: cover.png
 categories:
-    - Rust
+    - rust
 tags:
     - Translation
     - Rust
